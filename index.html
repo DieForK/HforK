@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="my">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0c10">
+  <meta name="description" content="ကိုယ်ပိုင် Dark Personal Blog">
+  <title>Midnight Notes — Personal Blog</title>
+  <style>
+    :root{--bg:#0b0c10;--panel:#12141b;--panel2:#171a23;--text:#f3f4f8;--muted:#9da3b4;--line:#292d39;--accent:#a78bfa;--accent2:#67e8f9;--danger:#fb7185}
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(ellipse at top right,#20183a 0,transparent 36%),var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans Myanmar",sans-serif;line-height:1.65}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    .wrap{width:min(920px,100% - 32px);margin:auto}
+    header{padding:30px 0 18px;border-bottom:1px solid var(--line)}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0b0c10;font-weight:900;font-size:20px}
+    h1{font-size:clamp(1.25rem,4vw,1.7rem);margin:0;letter-spacing:-.03em}
+    .sub{color:var(--muted);font-size:.9rem;margin:2px 0 0}
+    .pill{border:1px solid var(--line);border-radius:999px;padding:7px 12px;color:var(--muted);font-size:.8rem;white-space:nowrap}
+    .hero{padding:36px 0 26px}
+    .eyebrow{color:var(--accent2);text-transform:uppercase;letter-spacing:.16em;font-size:.75rem;font-weight:700}
+    .hero h2{font-size:clamp(2rem,8vw,3.7rem);line-height:1.13;letter-spacing:-.055em;margin:10px 0 14px;max-width:720px}
+    .hero h2 span{color:var(--accent)}
+    .hero p{color:var(--muted);max-width:620px;margin:0}
+    .tools{display:grid;grid-template-columns:1fr auto;gap:10px;margin:18px 0 24px}
+    .search{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px 15px;color:var(--text);outline:none}
+    .search:focus,textarea:focus,input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #a78bfa20}
+    .btn{border:0;border-radius:13px;padding:11px 15px;font-weight:750;background:var(--accent);color:#171125;transition:transform .15s,opacity .15s}
+    .btn:active{transform:scale(.98)}
+    .btn.secondary{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+    .btn.danger{background:#3a1824;color:#fecdd3;border:1px solid #6b2538}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 14px}
+    .section-title h3{margin:0;font-size:1.15rem}
+    #count{color:var(--muted);font-size:.85rem}
+    .posts{display:grid;gap:14px}
+    .post{background:linear-gradient(145deg,#151720,#101117);border:1px solid var(--line);border-radius:20px;padding:20px}
+    .post-meta{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:.82rem;flex-wrap:wrap}
+    .tag{color:var(--accent2);background:#67e8f910;border:1px solid #67e8f925;border-radius:999px;padding:2px 9px}
+    .post h4{font-size:1.3rem;line-height:1.35;margin:12px 0 8px;letter-spacing:-.02em;overflow-wrap:anywhere}
+    .post p{white-space:pre-wrap;color:#c8cbd6;margin:0;overflow-wrap:anywhere}
+    .post-actions{display:flex;justify-content:flex-end;margin-top:15px}
+    .empty{border:1px dashed #343847;border-radius:18px;padding:32px 18px;text-align:center;color:var(--muted)}
+    .editor{margin:34px 0;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:20px}
+    .editor h3{margin:0 0 4px}
+    .hint{color:var(--muted);font-size:.88rem;margin:0 0 18px}
+    label{display:block;font-size:.88rem;color:#d8d9e2;margin:14px 0 7px}
+    input,textarea{display:block;width:100%;background:#0d0f15;border:1px solid var(--line);border-radius:12px;padding:12px 13px;color:var(--text);outline:none}
+    textarea{min-height:145px;resize:vertical}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .editor-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+    .note{font-size:.8rem;color:var(--muted);margin-top:12px}
+    footer{border-top:1px solid var(--line);margin-top:35px;padding:20px 0 30px;color:var(--muted);font-size:.83rem;text-align:center}
+    .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#e9ddff;color:#201532;padding:10px 16px;border-radius:12px;font-weight:700;box-shadow:0 10px 35px #0008;display:none;max-width:calc(100% - 24px);z-index:5}
+    @media(min-width:680px){.posts{grid-template-columns:repeat(2,minmax(0,1fr))}.post:first-child{grid-column:1/-1}.post:first-child h4{font-size:1.55rem}}
+    @media(max-width:520px){.wrap{width:calc(100% - 24px)}header{padding-top:20px}.pill{display:none}.hero{padding-top:27px}.tools{grid-template-columns:1fr}.tools .btn{width:100%}.form-row{grid-template-columns:1fr}.editor{padding:16px}.post{padding:17px}.editor-actions .btn{flex:1}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap top">
+      <div class="brand"><div class="logo">M</div><div><h1>Midnight Notes</h1><p class="sub">A little space for my thoughts.</p></div></div>
+      <div class="pill">✦ PERSONAL BLOG</div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">WELCOME TO MY WORLD</div>
+      <h2>Thoughts after <span>dark.</span></h2>
+      <p>ကိုယ့်အတွေးတွေ၊ နေ့စဉ်မှတ်တမ်းတွေ၊ ဘဝအကြောင်း စိတ်ထဲရှိတာတွေကို ဒီနေရာလေးမှာ ရေးသားထားမယ်။</p>
+    </section>
+    <div class="tools">
+      <input id="search" class="search" type="search" placeholder="🔎  စာတွေကို ရှာဖွေပါ..." aria-label="စာတွေကို ရှာဖွေပါ">
+      <button id="newPostBtn" class="btn" type="button">＋ စာအသစ်ရေးမယ်</button>
+    </div>
+    <section aria-labelledby="postsHeading">
+      <div class="section-title"><h3 id="postsHeading">Latest thoughts</h3><span id="count">0 posts</span></div>
+      <div id="posts" class="posts"></div>
+    </section>
+    <section id="editor" class="editor">
+      <h3>✍️ စာအသစ်ရေးမယ်</h3>
+      <p class="hint">ကိုယ်ရေးချင်တဲ့ အကြောင်းအရာကို ဖြည့်ပြီး သိမ်းလိုက်ပါ။</p>
+      <form id="postForm">
+        <label for="title">ခေါင်းစဉ်</label>
+        <input id="title" maxlength="100" required placeholder="ဥပမာ - ဒီနေ့ရဲ့ အတွေးများ">
+        <div class="form-row">
+          <div><label for="category">အမျိုးအစား</label><input id="category" maxlength="35" placeholder="ဥပမာ - Diary" value="My thoughts"></div>
+          <div><label for="date">ရက်စွဲ</label><input id="date" type="date" required></div>
+        </div>
+        <label for="content">စာသား</label>
+        <textarea id="content" maxlength="12000" required placeholder="ဒီနေရာမှာ ကိုယ့်အတွေးတွေကို ရေးပါ..."></textarea>
+        <div class="editor-actions">
+          <button class="btn" type="submit">စာကို သိမ်းမယ်</button>
+          <button class="btn secondary" id="clearBtn" type="button">ရှင်းလင်းမယ်</button>
+        </div>
+      </form>
+      <p class="note">မှတ်ချက် — စာတွေကို ဒီ Browser ရဲ့ local storage ထဲမှာ သိမ်းပါတယ်။ Browser data ဖျက်တာ၊ တခြားဖုန်းသုံးတာတို့ကြောင့် စာတွေ မပေါ်တော့နိုင်ပါ။</p>
+    </section>
+  </main>
+  <footer><div class="wrap">Made with ☾ &amp; thoughts · Midnight Notes</div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script>
+    const KEY = "midnightNotesPosts_v1";
+    const $ = id => document.getElementById(id);
+    const today = new Date();
+    $("date").value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+    const starter = [
+      {id:"welcome",title:"ဒီနေရာလေးက ကိုယ့်အတွက်",category:"Welcome",date:"2026-10-14",content:"တစ်ခါတလေ စိတ်ထဲကအတွေးတွေကို စာနဲ့ချရေးလိုက်ရင် ပိုပြီးရှင်းလင်းသွားတတ်တယ်။\\n\\nဒီ Blog လေးက ကိုယ့်အတွေးတွေ၊ အမှတ်တရတွေကို သိမ်းထားဖို့ ကိုယ်ပိုင်နေရာလေးပါ။"}
+    ];
+    function loadPosts(){try{const x=JSON.parse(localStorage.getItem(KEY));return Array.isArray(x)?x:starter.slice()}catch(e){return starter.slice()}}
+    let posts = loadPosts();
+    function save(){try{localStorage.setItem(KEY,JSON.stringify(posts));return true}catch(e){notify("သိမ်းမရပါ။ Browser storage ကို စစ်ကြည့်ပါ။");return false}}
+    function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+    function niceDate(s){if(!s)return "";const d=new Date(s+"T00:00:00");return Number.isNaN(d.getTime())?s:d.toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}
+    function render(){
+      const q=$("search").value.trim().toLowerCase();
+      const filtered=posts.filter(p=>[p.title,p.content,p.category].some(v=>String(v||"").toLowerCase().includes(q)));
+      $("count").textContent=`${filtered.length} post${filtered.length===1?"":"s"}`;
+      if(!filtered.length){$("posts").innerHTML='<div class="empty">ဒီရှာဖွေမှုနဲ့ ကိုက်ညီတဲ့စာ မတွေ့ပါဘူး။<br>စာအသစ်တစ်ပုဒ် ရေးကြည့်ပါ။</div>';return}
+      $("posts").innerHTML=filtered.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(p=>`
+        <article class="post">
+          <div class="post-meta"><span>${escapeHTML(niceDate(p.date))}</span><span>·</span><span class="tag">${escapeHTML(p.category||"Notes")}</span></div>
+          <h4>${escapeHTML(p.title)}</h4><p>${escapeHTML(p.content)}</p>
+          ${p.id!=="welcome"?`<div class="post-actions"><button class="btn danger" type="button" data-delete="${escapeHTML(p.id)}" aria-label="စာဖျက်မယ်">ဖျက်မယ်</button></div>`:""}
+        </article>`).join("");
+    }
+    function notify(msg){const t=$("toast");t.textContent=msg;t.style.display="block";clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.style.display="none",2300)}
+    $("postForm").addEventListener("submit",e=>{
+      e.preventDefault();
+      const p={id:Date.now().toString(),title:$("title").value.trim(),category:$("category").value.trim()||"Notes",date:$("date").value,content:$("content").value.trim()};
+      if(!p.title||!p.date||!p.content){notify("လိုအပ်တဲ့အကွက်တွေ ဖြည့်ပေးပါ။");return}
+      posts.unshift(p);
+      if(save()){render();$("postForm").reset();$("category").value="My thoughts";$("date").value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;notify("စာကို သိမ်းပြီးပါပြီ ✨");$("postsHeading").scrollIntoView({behavior:"smooth",block:"start"})}
+    });
+    $("posts").addEventListener("click",e=>{
+      const b=e.target.closest("[data-delete]");if(!b)return;
+      const p=posts.find(x=>x.id===b.dataset.delete);if(!p)return;
+      if(confirm(`"${p.title}" ကို ဖျက်မှာ သေချာပါသလား?`)){posts=posts.filter(x=>x.id!==b.dataset.delete);save();render();notify("စာကို ဖျက်ပြီးပါပြီ။")}
+    });
+    $("search").addEventListener("input",render);
+    $("clearBtn").addEventListener("click",()=>{$("postForm").reset();$("category").value="My thoughts";$("date").value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`});
+    $("newPostBtn").addEventListener("click",()=>{$("editor").scrollIntoView({behavior:"smooth",block:"start"});setTimeout(()=>$("title").focus(),350)});
+    render();
+  </script>
+</body>
+</html>
